@@ -74,30 +74,22 @@ python -m spacy download en_core_web_sm
 python app.py
 ```
 
-Access the app at http://localhost:5000.
+>Access the app at http://localhost:5000.
 
 
 
-Usage
+**Usage**
 
-Open the app: Navigate to http://localhost:5000 in your browser.
-Upload a resume: Select a PDF resume file using the file upload input.
-Enter a job description: Paste or type the job description in the textarea.
-Analyze: Click the "Analyze Resume" button to process the resume.
-View results: See the match score, missing skills, and a link to download a PDF report.
-Download report: Click the "Download Report" link to save the analysis as a PDF.
+>Open the app: Navigate to http://localhost:5000 in your browser.
 
-Contributing
-Contributions are welcome! To contribute:
+>Upload a resume: Select a PDF resume file using the file upload input.
 
-Fork the repository.
-Create a feature branch: git checkout -b feature/your-feature.
-Commit your changes: git commit -m "Add your feature".
-Push to the branch: git push origin feature/your-feature.
-Open a pull request.
+>Enter a job description: Paste or type the job description in the textarea.
 
-Please follow the Code of Conduct and report issues via the Issues tab.
-License
-This project is licensed under the MIT License. See the LICENSE file for details.
+>Analyze: Click the "Analyze Resume" button to process the resume.
 
-Built with ❤️ by [Your Name]
+>View results: See the match score, missing skills, and a link to download a PDF report.
+
+>Download report: Click the "Download Report" link to save the analysis as a PDF.
+
+

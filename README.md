@@ -4,23 +4,35 @@ A web application that analyzes resumes by extracting keywords, matching them ag
 
 **Table of Contents**
 
--Features
--Technologies
--Project Structure
-I-nstallation
--Usage
--Contributing
--License
+>Features
+
+>Technologies
+
+>Project Structure
+
+>Installation
+
+>Usage
+
+>Contributing
+
+
 
 ## Features
 
-Resume Upload: Upload PDF resumes for analysis.
-Keyword Extraction: Extracts relevant keywords from resumes and job descriptions using spaCy.
-Job Description Matching: Calculates a match score between the resume and job description using TF-IDF and cosine similarity.
-Missing Skills Identification: Highlights skills present in the job description but missing from the resume.
-Feedback Report: Generates a downloadable PDF report summarizing the match score and missing skills.
-Modern UI: Responsive dark-themed interface with user-friendly form and visual feedback.
-Persistent Storage: Stores job descriptions and analysis results in an SQLite database.
+>**Resume Upload**: Upload PDF resumes for analysis.
+
+>Keyword Extraction: Extracts relevant keywords from resumes and job descriptions using spaCy.
+
+>Job Description Matching: Calculates a match score between the resume and job description using TF-IDF and cosine similarity.
+
+>Missing Skills Identification: Highlights skills present in the job description but missing from the resume.
+
+>Feedback Report: Generates a downloadable PDF report summarizing the match score and missing skills.
+
+>Modern UI: Responsive dark-themed interface with user-friendly form and visual feedback.
+
+>Persistent Storage: Stores job descriptions and analysis results in an SQLite database.
 
 ## Technologies
 

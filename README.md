@@ -1,8 +1,8 @@
 ## AI Resume Analyzer
 
-A web application that analyzes resumes by extracting keywords, matching them against a job description, and providing<br>
-a match score, missing skills, and a downloadable feedback report. Built with Flask, spaCy, scikit-learn, and SQLite,<br>
-it features a modern dark-themed UI for an enhanced user experience.
+>A resume analysis web application providing a match score, missing skills, and a feedback report by<br>
+ extracting keywords and comparing them to a job description. Built with Flask, spaCy, scikit-learn,<br> 
+ and SQLite, it offers a modern, dark-themed UI.
 
 **Table of Contents**
 

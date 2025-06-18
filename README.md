@@ -36,14 +36,20 @@ A web application that analyzes resumes by extracting keywords, matching them ag
 
 ## Technologies
 
-Frontend: HTML, CSS, JavaScript
-Backend: Flask (Python)
-ML/NLP: spaCy, scikit-learn
-Database: SQLite
-PDF Processing: PyPDF2 (for resume parsing), ReportLab (for report generation)
-Styling: Custom CSS with Inter font from Google Fonts
+>Frontend: HTML, CSS, JavaScript
 
-Project Structure
+>Backend: Flask (Python)
+
+>ML/NLP: spaCy, scikit-learn
+
+>Database: SQLite
+
+>PDF Processing: PyPDF2 (for resume parsing), ReportLab (for report generation)
+
+>Styling: Custom CSS with Inter font from Google Fonts
+
+**Project Structure**
+```
 resume_analyzer/
 ├── app.py                  # Main Flask application
 ├── README.md               # Project documentation
@@ -55,27 +61,18 @@ resume_analyzer/
 ├── templates/              # HTML templates
 │   └── index.html          # Main page template
 └── uploads/                # Directory for uploaded resumes
+```
 
-Installation
-
-Clone the repository:
-git clone https://github.com/your-username/resume-analyzer.git
-cd resume_analyzer
-
-
-Set up a virtual environment (optional but recommended):
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-
-Install dependencies:
+**Install dependencies:**
+```
 pip install -r requirements.txt
 python -m spacy download en_core_web_sm
+```
 
-
-Run the application:
+**Run the application:**
+```
 python app.py
-
+```
 
 Access the app at http://localhost:5000.
 

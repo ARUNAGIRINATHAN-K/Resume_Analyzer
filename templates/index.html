@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Resume Analyzer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Resume Analyzer</h1>
+    <form id="upload-form" enctype="multipart/form-data">
+        <label for="resume">Upload Resume (PDF):</label>
+        <input type="file" id="resume" name="resume" accept=".pdf" required><br>
+        <label for="job_desc">Job Description:</label>
+        <textarea id="job_desc" name="job_desc" required></textarea><br>
+        <button type="submit">Analyze</button>
+    </form>
+    <div id="results"></div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

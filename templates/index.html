@@ -1,19 +1,36 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resume Analyzer</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>Resume Analyzer</h1>
-    <form id="upload-form" enctype="multipart/form-data">
-        <label for="resume">Upload Resume (PDF):</label>
-        <input type="file" id="resume" name="resume" accept=".pdf" required><br>
-        <label for="job_desc">Job Description:</label>
-        <textarea id="job_desc" name="job_desc" required></textarea><br>
-        <button type="submit">Analyze</button>
-    </form>
-    <div id="results"></div>
+    <div class="container">
+        <header>
+            <h1>Resume Analyzer</h1>
+            <p>Upload your resume and job description to get a match score and feedback</p>
+        </header>
+        <main>
+            <form id="upload-form" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="resume">Upload Resume (PDF)</label>
+                    <div class="file-upload">
+                        <input type="file" id="resume" name="resume" accept=".pdf" required>
+                        <span class="file-name">No file chosen</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="job_desc">Job Description</label>
+                    <textarea id="job_desc" name="job_desc" placeholder="Paste the job description here..." required></textarea>
+                </div>
+                <button type="submit" class="btn">Analyze Resume</button>
+            </form>
+            <div id="results" class="results"></div>
+        </main>
+    </div>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

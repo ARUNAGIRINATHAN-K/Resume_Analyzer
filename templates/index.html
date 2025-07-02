@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Resume - Resume Analyzer{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <!-- Header -->
+        <div class="text-center mb-5">
+            <h1 class="display-5 fw-bold mb-3">
+                <i class="fas fa-search me-3 text-primary"></i>
+                Resume Job Fit Analyzer
+            </h1>
+            <p class="lead text-muted">
+                Upload your resume and paste a job description to get an AI-powered compatibility score
+                with personalized improvement suggestions.
+            </p>
+        </div>
+
+        <!-- Main Form -->
+        <div class="card shadow-lg">
+            <div class="card-header">
+                <h3 class="card-title mb-0">
+                    <i class="fas fa-upload me-2"></i>
+                    Analyze Your Resume
+                </h3>
+            </div>
+            <div class="card-body p-4">
+                <form action="{{ url_for('analyze') }}" method="post" enctype="multipart/form-data" id="analyzeForm">
+                    <!-- Resume Upload -->
+                    <div class="mb-4">
+                        <label for="resume" class="form-label h5">
+                            <i class="fas fa-file-pdf me-2 text-danger"></i>
+                            Upload Resume (PDF)
+                        </label>
+                        <input type="file" 
+                               class="form-control form-control-lg" 
+                               id="resume" 
+                               name="resume" 
+                               accept=".pdf" 
+                               required>
+                        <div class="form-text">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Only PDF files are supported. Maximum size: 16MB
+                        </div>
+                    </div>
+
+                    <!-- Job Description -->
+                    <div class="mb-4">
+                        <label for="job_description" class="form-label h5">
+                            <i class="fas fa-briefcase me-2 text-primary"></i>
+                            Job Description
+                        </label>
+                        <textarea class="form-control" 
+                                  id="job_description" 
+                                  name="job_description" 
+                                  rows="12" 
+                                  placeholder="Paste the complete job description here. Include requirements, responsibilities, and qualifications for the most accurate analysis..."
+                                  required></textarea>
+                        <div class="form-text">
+                            <i class="fas fa-lightbulb me-1"></i>
+                            Tip: Include the complete job posting for better analysis accuracy
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">
+                            <i class="fas fa-cogs me-2"></i>
+                            Analyze Resume Fit
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Features -->
+        <div class="row mt-5">
+            <div class="col-md-4 text-center mb-4">
+                <div class="card h-100 border-0 bg-transparent">
+                    <div class="card-body">
+                        <i class="fas fa-brain fa-3x text-primary mb-3"></i>
+                        <h5>AI-Powered Analysis</h5>
+                        <p class="text-muted">Advanced NLP algorithms analyze your resume against job requirements</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 text-center mb-4">
+                <div class="card h-100 border-0 bg-transparent">
+                    <div class="card-body">
+                        <i class="fas fa-chart-line fa-3x text-success mb-3"></i>
+                        <h5>Detailed Scoring</h5>
+                        <p class="text-muted">Get weighted scores for skills, experience, and role alignment</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 text-center mb-4">
+                <div class="card h-100 border-0 bg-transparent">
+                    <div class="card-body">
+                        <i class="fas fa-lightbulb fa-3x text-warning mb-3"></i>
+                        <h5>Smart Suggestions</h5>
+                        <p class="text-muted">Receive actionable recommendations to improve your resume</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.getElementById('analyzeForm').addEventListener('submit', function(e) {
+    const submitBtn = document.getElementById('submitBtn');
+    const originalText = submitBtn.innerHTML;
+    
+    // Show loading state
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Analyzing...';
+    submitBtn.disabled = true;
+    
+    // Re-enable if there's an error (page doesn't redirect)
+    setTimeout(function() {
+        if (submitBtn.disabled) {
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        }
+    }, 30000); // 30 second timeout
+});
+</script>
+{% endblock %}

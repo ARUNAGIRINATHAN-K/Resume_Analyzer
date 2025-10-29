@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Resume - Resume Analyzer{% endblock %}
+
+{% block hero %}
+<section class="hero-section py-5">
+  <div class="container text-center">
+    <h1 class="display-5 fw-bold mb-3">Find Your Perfect Job Match in Seconds</h1>
+    <p class="lead text-muted mb-4">Upload your resume and paste a job description to get an AI-powered compatibility score with actionable suggestions.</p>
+    <div class="d-flex justify-content-center gap-2 flex-wrap">
+      <span class="feature-chip"><i class="fas fa-bolt me-2"></i>Fast</span>
+      <span class="feature-chip"><i class="fas fa-brain me-2"></i>Accurate</span>
+      <span class="feature-chip"><i class="fas fa-shield-alt me-2"></i>Private</span>
+    </div>
+  </div>
+  <div class="container mt-4">
+    <div class="alert alert-secondary text-center small mb-0" role="alert">
+      We don’t store your files. PDFs only, max 16MB.
+    </div>
+  </div>
+  </section>
+{% endblock %}
+
+{% block content %}
+<div class="row g-4 align-items-stretch">
+  <!-- Left: Drag & Drop Resume -->
+  <div class="col-12 col-lg-4">
+    <div class="card h-100">
+      <div class="card-header">
+        <h3 class="card-title mb-0"><i class="fas fa-file-pdf me-2 text-danger"></i>Resume (PDF)</h3>
+      </div>
+      <div class="card-body">
+        <form action="{{ url_for('analyze') }}" method="post" enctype="multipart/form-data" id="analyzeForm">
+          <div id="dropzone" class="dropzone text-center p-4 mb-3" tabindex="0">
+            <i class="fas fa-cloud-upload-alt fa-2x mb-3"></i>
+            <p class="mb-1">Drop your PDF here</p>
+            <small class="text-muted">or click to browse</small>
+          </div>
+          <input type="file" id="resume" name="resume" accept=".pdf" class="d-none" required>
+          <div id="fileInfo" class="small text-muted d-none">
+            <i class="fas fa-paperclip me-1"></i><span id="fileName">resume.pdf</span>
+            <button type="button" class="btn btn-link btn-sm ms-2 p-0" id="removeFile">Remove</button>
+          </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right: Job Description -->
+  <div class="col-12 col-lg-8">
+    <div class="card h-100">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h3 class="card-title mb-0"><i class="fas fa-briefcase me-2 text-primary"></i>Job Description</h3>
+        <div class="d-flex gap-2">
+          <button type="button" class="btn btn-outline-secondary btn-sm" id="sampleJD"><i class="fas fa-clipboard-list me-1"></i>Use Sample</button>
+        </div>
+      </div>
+      <div class="card-body">
+          <textarea class="form-control" id="job_description" name="job_description" rows="12" placeholder="Paste the complete job description here. Include requirements, responsibilities, and qualifications for the most accurate analysis..." required></textarea>
+          <div class="d-flex justify-content-between mt-2 small text-muted">
+            <span><i class="fas fa-lightbulb me-1"></i>Tip: Include the full posting for best accuracy.</span>
+            <span id="jdCounter">0 characters</span>
+          </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Analyze CTA -->
+  <div class="col-12">
+    <div class="d-grid">
+      <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">
+        <i class="fas fa-magnifying-glass-chart me-2"></i>Analyze Resume Fit
+      </button>
+    </div>
+  </div>
+  </form>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.getElementById('analyzeForm').addEventListener('submit', function(e) {
+    const submitBtn = document.getElementById('submitBtn');
+    const originalText = submitBtn.innerHTML;
+    
+    // Show loading state
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Analyzing...';
+    submitBtn.disabled = true;
+    
+    // Re-enable if there's an error (page doesn't redirect)
+    setTimeout(function() {
+        if (submitBtn.disabled) {
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        }
+    }, 30000); // 30 second timeout
+});
+</script>
+{% endblock %}

@@ -1,0 +1,288 @@
+/* Custom styles for Resume Analyzer */
+
+:root {
+    --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --gradient-success: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    --gradient-warning: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+/* Enhanced card styling */
+.card {
+    border: none;
+    border-radius: 15px;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--bs-box-shadow-lg) !important;
+}
+
+.card-header {
+    border-radius: 15px 15px 0 0 !important;
+    border-bottom: 1px solid var(--bs-border-color);
+}
+
+/* Form enhancements */
+.form-control {
+    border-radius: 10px;
+    border: 2px solid var(--bs-border-color);
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-control:focus {
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+/* Button enhancements */
+.btn {
+    border-radius: 10px;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-primary {
+    background: var(--gradient-primary);
+    border: none;
+}
+
+.btn-primary:hover {
+    background: var(--gradient-primary);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
+}
+
+/* Badge styling */
+.badge {
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 0.75em;
+    padding: 0.5em 0.75em;
+}
+
+/* Navigation */
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+/* Progress bars and score indicators */
+.progress {
+    height: 1.5rem;
+    border-radius: 10px;
+    background-color: var(--bs-secondary-bg);
+}
+
+.progress-bar {
+    border-radius: 10px;
+    transition: width 0.6s ease;
+}
+
+/* Chart containers */
+canvas {
+    max-height: 300px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .display-5 {
+        font-size: 2rem;
+    }
+    
+    .display-6 {
+        font-size: 1.75rem;
+    }
+    
+    .card-body {
+        padding: 1.5rem;
+    }
+}
+
+/* Print styles */
+@media print {
+    .btn,
+    .navbar,
+    footer {
+        display: none !important;
+    }
+    
+    .card {
+        border: 1px solid #000 !important;
+        box-shadow: none !important;
+    }
+    
+    .text-primary,
+    .text-success,
+    .text-warning,
+    .text-danger {
+        color: #000 !important;
+    }
+}
+
+/* Loading states */
+.btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* Score visualization */
+.score-circle {
+    position: relative;
+    display: inline-block;
+}
+
+.score-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-weight: bold;
+}
+
+/* Keyword analysis */
+.keyword-container {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.keyword-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.keyword-container::-webkit-scrollbar-track {
+    background: var(--bs-secondary-bg);
+    border-radius: 3px;
+}
+
+.keyword-container::-webkit-scrollbar-thumb {
+    background: var(--bs-secondary);
+    border-radius: 3px;
+}
+
+/* Animation for score reveal */
+@keyframes scoreReveal {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.score-reveal {
+    animation: scoreReveal 0.6s ease-out;
+}
+
+/* Enhanced file input */
+.form-control[type="file"] {
+    padding: 0.875rem;
+}
+
+.form-control[type="file"]::-webkit-file-upload-button {
+    background: var(--bs-primary);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    margin-right: 1rem;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+/* Suggestion cards */
+.border-start {
+    border-left-width: 4px !important;
+}
+
+/* Interactive elements */
+.clickable {
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.clickable:hover {
+    transform: translateY(-1px);
+}
+
+/* Status indicators */
+.status-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 8px;
+}
+
+.status-excellent {
+    background-color: var(--bs-success);
+}
+
+.status-good {
+    background-color: var(--bs-primary);
+}
+
+.status-fair {
+    background-color: var(--bs-warning);
+}
+
+.status-poor {
+    background-color: var(--bs-danger);
+}
+
+/* Hero section */
+.hero-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    margin-bottom: 2rem;
+}
+
+/* Feature chips */
+.feature-chip {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    backdrop-filter: blur(10px);
+}
+
+/* Dropzone */
+.dropzone {
+    border: 2px dashed var(--bs-border-color);
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.dropzone:hover,
+.dropzone.dragover {
+    border-color: var(--bs-primary);
+    background-color: rgba(13, 110, 253, 0.05);
+}
+
+/* Priority borders */
+.border-high {
+    border-left-color: var(--bs-danger) !important;
+}
+
+.border-medium {
+    border-left-color: var(--bs-warning) !important;
+}
+
+.border-low {
+    border-left-color: var(--bs-info) !important;
+}
+
+/* Mobile sticky CTA */
+@media (max-width: 767.98px) {
+    .btn-sticky {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+}

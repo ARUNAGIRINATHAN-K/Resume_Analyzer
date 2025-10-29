@@ -1,0 +1,290 @@
+{% extends "base.html" %}
+
+{% block title %}Analysis Results - Resume Analyzer{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <!-- Header with CTAs -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="display-6 fw-bold">
+                <i class="fas fa-chart-bar me-3 text-primary"></i>
+                Analysis Results
+            </h1>
+            <div class="d-flex gap-2">
+                <button id="downloadPDF" class="btn btn-outline-primary">
+                    <i class="fas fa-download me-2"></i>Download PDF
+                </button>
+                <button id="shareResults" class="btn btn-outline-secondary">
+                    <i class="fas fa-share me-2"></i>Share
+                </button>
+                <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>Analyze Another
+                </a>
+            </div>
+        </div>
+
+        <!-- Overall Score Hero -->
+        <div class="card shadow-lg mb-4">
+            <div class="card-body text-center py-5">
+                <h2 class="mb-3">Overall Job Fit Score</h2>
+                <div class="position-relative d-inline-block">
+                    <canvas id="overallScoreChart" width="200" height="200"></canvas>
+                    <div class="position-absolute top-50 start-50 translate-middle">
+                        <h1 class="display-3 fw-bold text-{{ 'success' if results.overall_score >= 80 else 'warning' if results.overall_score >= 60 else 'danger' }}">
+                            {{ results.overall_score }}
+                        </h1>
+                        <small class="text-muted">out of 100</small>
+                    </div>
+                </div>
+                <p class="mt-3 lead">
+                    {% if results.overall_score >= 85 %}
+                        <i class="fas fa-trophy text-warning me-2"></i>
+                        Excellent Match! Your resume aligns very well with this position.
+                    {% elif results.overall_score >= 70 %}
+                        <i class="fas fa-thumbs-up text-success me-2"></i>
+                        Good Match! Some improvements could make your resume even stronger.
+                    {% elif results.overall_score >= 50 %}
+                        <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+                        Moderate Match. Consider tailoring your resume more specifically.
+                    {% else %}
+                        <i class="fas fa-times-circle text-danger me-2"></i>
+                        Low Match. Significant improvements needed for this position.
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Score Breakdown -->
+            <div class="col-lg-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">
+                            <i class="fas fa-chart-pie me-2"></i>
+                            Score Breakdown
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="scoreBreakdownChart" width="400" height="300"></canvas>
+                        
+                        <!-- Score Details -->
+                        <div class="mt-4">
+                            <div class="row g-3">
+                                <div class="col-4 text-center">
+                                    <div class="border rounded p-3">
+                                        <h5 class="text-primary">{{ results.skill_score }}</h5>
+                                        <small class="text-muted">Skills Match<br>(50% weight)</small>
+                                    </div>
+                                </div>
+                                <div class="col-4 text-center">
+                                    <div class="border rounded p-3">
+                                        <h5 class="text-info">{{ results.role_score }}</h5>
+                                        <small class="text-muted">Role Relevance<br>(30% weight)</small>
+                                    </div>
+                                </div>
+                                <div class="col-4 text-center">
+                                    <div class="border rounded p-3">
+                                        <h5 class="text-success">{{ results.experience_score }}</h5>
+                                        <small class="text-muted">Experience<br>(20% weight)</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Keywords Analysis -->
+            <div class="col-lg-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">
+                            <i class="fas fa-key me-2"></i>
+                            Keywords Analysis
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <!-- Matched Keywords -->
+                        {% if results.matched_keywords %}
+                        <div class="mb-4">
+                            <h6 class="text-success">
+                                <i class="fas fa-check-circle me-2"></i>
+                                Matched Keywords ({{ results.matched_keywords|length }})
+                            </h6>
+                            <div class="d-flex flex-wrap gap-1">
+                                {% for keyword in results.matched_keywords[:15] %}
+                                <span class="badge bg-success">{{ keyword }}</span>
+                                {% endfor %}
+                                {% if results.matched_keywords|length > 15 %}
+                                <span class="badge bg-secondary">+{{ results.matched_keywords|length - 15 }} more</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <!-- Missing Keywords -->
+                        {% if results.missing_keywords %}
+                        <div>
+                            <h6 class="text-warning">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                Missing Keywords ({{ results.missing_keywords|length }})
+                            </h6>
+                            <div class="d-flex flex-wrap gap-1">
+                                {% for keyword in results.missing_keywords[:15] %}
+                                <span class="badge bg-warning">{{ keyword }}</span>
+                                {% endfor %}
+                                {% if results.missing_keywords|length > 15 %}
+                                <span class="badge bg-secondary">+{{ results.missing_keywords|length - 15 }} more</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if not results.matched_keywords and not results.missing_keywords %}
+                        <div class="text-center text-muted py-4">
+                            <i class="fas fa-search fa-2x mb-3"></i>
+                            <p>No specific keyword matches found. Consider adding more relevant terms to your resume.</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Improvement Suggestions -->
+        {% if results.suggestions %}
+        <div class="card shadow-lg">
+            <div class="card-header">
+                <h4 class="card-title mb-0">
+                    <i class="fas fa-lightbulb me-2"></i>
+                    Improvement Suggestions
+                </h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    {% for suggestion in results.suggestions %}
+                    <div class="col-lg-6 mb-4">
+                        <div class="card h-100 border-start border-4 border-{{ 'danger' if suggestion.priority == 'High' else 'warning' if suggestion.priority == 'Medium' else 'info' }}">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h6 class="card-title">
+                                        <i class="fas fa-{{ 'exclamation' if suggestion.priority == 'High' else 'star' if suggestion.priority == 'Medium' else 'info-circle' }} me-2"></i>
+                                        {{ suggestion.category }}
+                                    </h6>
+                                    <span class="badge bg-{{ 'danger' if suggestion.priority == 'High' else 'warning' if suggestion.priority == 'Medium' else 'info' }}">
+                                        {{ suggestion.priority }}
+                                    </span>
+                                </div>
+                                <p class="fw-bold mb-2">{{ suggestion.suggestion }}</p>
+                                <p class="text-muted small mb-0">{{ suggestion.description }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Footer Actions -->
+        <div class="text-center mt-5">
+            <a href="{{ url_for('index') }}" class="btn btn-primary btn-lg me-3">
+                <i class="fas fa-upload me-2"></i>
+                Analyze Another Resume
+            </a>
+            <button onclick="window.print()" class="btn btn-outline-secondary btn-lg">
+                <i class="fas fa-print me-2"></i>
+                Print Results
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Overall Score Doughnut Chart
+const overallCtx = document.getElementById('overallScoreChart').getContext('2d');
+const overallScore = {{ results.overall_score }};
+
+new Chart(overallCtx, {
+    type: 'doughnut',
+    data: {
+        datasets: [{
+            data: [overallScore, 100 - overallScore],
+            backgroundColor: [
+                overallScore >= 80 ? '#198754' : overallScore >= 60 ? '#ffc107' : '#dc3545',
+                '#e9ecef'
+            ],
+            borderWidth: 0
+        }]
+    },
+    options: {
+        responsive: false,
+        maintainAspectRatio: false,
+        cutout: '70%',
+        plugins: {
+            legend: {
+                display: false
+            },
+            tooltip: {
+                enabled: false
+            }
+        }
+    }
+});
+
+// Score Breakdown Bar Chart
+const breakdownCtx = document.getElementById('scoreBreakdownChart').getContext('2d');
+
+new Chart(breakdownCtx, {
+    type: 'bar',
+    data: {
+        labels: ['Skills Match\n(50%)', 'Role Relevance\n(30%)', 'Experience\n(20%)'],
+        datasets: [{
+            label: 'Score',
+            data: [{{ results.skill_score }}, {{ results.role_score }}, {{ results.experience_score }}],
+            backgroundColor: [
+                'rgba(13, 110, 253, 0.8)',
+                'rgba(13, 202, 240, 0.8)',
+                'rgba(25, 135, 84, 0.8)'
+            ],
+            borderColor: [
+                'rgba(13, 110, 253, 1)',
+                'rgba(13, 202, 240, 1)',
+                'rgba(25, 135, 84, 1)'
+            ],
+            borderWidth: 2
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            y: {
+                beginAtZero: true,
+                max: 100,
+                ticks: {
+                    callback: function(value) {
+                        return value + '%';
+                    }
+                }
+            }
+        },
+        plugins: {
+            legend: {
+                display: false
+            },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        return context.parsed.y + '%';
+                    }
+                }
+            }
+        }
+    }
+});
+</script>
+{% endblock %}

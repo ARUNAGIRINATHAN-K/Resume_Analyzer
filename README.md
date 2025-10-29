@@ -1,25 +1,42 @@
-## Resume Job Fit Analyzer
+# Resume Job Fit Analyzer 🎯
 
-A sophisticated web-based Resume Analyzer that uses Natural Language Processing (NLP) to compare resumes with job descriptions and provides compatibility scores with actionable improvement suggestions.
+[![Python](https://img.shields.io/badge/Python-3.11+-blue.svg?logo=python&logoColor=white)](https://www.python.org/)
+[![Flask](https://img.shields.io/badge/Flask-2.3.0-green.svg?logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
+[![spaCy](https://img.shields.io/badge/spaCy-3.8.0-orange.svg?logo=spacy&logoColor=white)](https://spacy.io/)
+[![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3-purple.svg?logo=bootstrap&logoColor=white)](https://getbootstrap.com/)
+[![Chart.js](https://img.shields.io/badge/Chart.js-4.0+-red.svg?logo=chart.js&logoColor=white)](https://www.chartjs.org/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-brightgreen.svg)](https://github.com/ARUNAGIRINATHAN-K/resume-analyzer/graphs/commit-activity)
+[![Code Style](https://img.shields.io/badge/code%20style-PEP8-blue.svg)](https://www.python.org/dev/peps/pep-0008/)
 
-![Resume Analyzer Screenshot](https://img.shields.io/badge/Python-3.11-blue.svg)
-![Flask](https://img.shields.io/badge/Flask-2.3.0-green.svg)
-![spaCy](https://img.shields.io/badge/spaCy-3.8.0-orange.svg)
-![License](https://img.shields.io/badge/License-MIT-yellow.svg)
+> A sophisticated web-based Resume Analyzer powered by Natural Language Processing (NLP) that intelligently compares resumes with job descriptions, providing detailed compatibility scores and actionable improvement suggestions in real-time.
 
-## Features
+![Resume Analyzer Demo](static/img/demo.gif)
 
-- **PDF Resume Upload**: Extract text from PDF resumes using PyMuPDF
-- **NLP-Powered Analysis**: Advanced text processing using spaCy for skill extraction and analysis
-- **Intelligent Scoring System**: Weighted scoring algorithm considering:
-  - Skills overlap (50% weight)
-  - Role relevance (30% weight)
-  - Experience/education match (20% weight)
-- **Visual Analytics**: Interactive charts powered by Chart.js
-- **Keyword Analysis**: Identify matched and missing keywords between resume and job description
-- **Actionable Suggestions**: Get personalized recommendations to improve resume alignment
-- **Responsive Design**: Clean, modern UI with Bootstrap framework
-- **Real-time Processing**: Fast analysis with detailed progress indicators
+## ✨ Key Features
+
+### 📊 Smart Analysis
+- **PDF Resume Upload**: Seamless text extraction from PDF resumes using PyMuPDF
+- **NLP-Powered Analysis**: State-of-the-art text processing with spaCy for accurate skill extraction
+- **Real-time Processing**: Lightning-fast analysis with live progress indicators
+
+### 🎯 Intelligent Scoring
+- **Comprehensive Scoring Algorithm**:
+  - 📈 Skills Match (50%): Technical and soft skills alignment
+  - 👔 Role Relevance (30%): Job title and responsibility matching
+  - 🎓 Experience/Education (20%): Qualifications assessment
+- **Dynamic Keyword Analysis**: Smart identification of matching and missing keywords
+
+### 📱 Modern User Interface
+- **Responsive Design**: Clean, modern UI powered by Bootstrap 5
+- **Interactive Visualizations**: Dynamic charts and graphs using Chart.js
+- **Drag & Drop**: Intuitive file upload experience
+- **Dark Mode Support**: Eye-friendly interface options
+
+### 🤖 Smart Recommendations
+- **Personalized Suggestions**: AI-driven resume improvement tips
+- **Skill Gap Analysis**: Detailed breakdown of missing qualifications
+- **Priority Insights**: Focus areas for maximum impact
 
 ## Demo
 
@@ -29,53 +46,93 @@ Upload your resume and paste a job description to get:
 - Matched vs. missing skills visualization
 - Prioritized improvement suggestions
 
-## Installation
+## 🚀 Getting Started
 
 ### Prerequisites
 
-- Python 3.11 or higher
-- pip package manager
+Before you begin, ensure you have the following installed:
+- [![Python](https://img.shields.io/badge/Python-3.11+-blue.svg?logo=python&logoColor=white)](https://www.python.org/downloads/)
+- [![pip](https://img.shields.io/badge/pip-latest-blue.svg?logo=pypi&logoColor=white)](https://pip.pypa.io/en/stable/installation/)
+- [![Git](https://img.shields.io/badge/Git-required-red.svg?logo=git&logoColor=white)](https://git-scm.com/downloads)
 
-### Quick Start
+### 📥 Installation
 
-1. **Clone the repository**
-   ```bash
+1. **Clone the Repository**
+   ```powershell
    git clone https://github.com/ARUNAGIRINATHAN-K/resume-analyzer.git
    cd resume-analyzer
    ```
 
-2. **Create a virtual environment**
-   ```bash
+2. **Set Up Virtual Environment**
+   ```powershell
+   # Create a new virtual environment
    python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+   # Activate the virtual environment
+   # On Windows:
+   .\venv\Scripts\activate
+   # On macOS/Linux:
+   # source venv/bin/activate
    ```
 
-3. **Install dependencies**
-   ```bash
+3. **Install Dependencies**
+   ```powershell
+   # Upgrade pip to latest version
+   python -m pip install --upgrade pip
+
+   # Install project dependencies
    pip install -r requirements.txt
    ```
 
-4. **Download spaCy language model**
-   ```bash
+4. **Install NLP Model**
+   ```powershell
+   # Download and install spaCy language model
    python -m spacy download en_core_web_sm
    ```
 
-5. **Set environment variables**
-   ```bash
-   export SESSION_SECRET="your-secret-key-here"
-   ```
-   Or create a `.env` file:
-   ```
+### 🔧 Configuration
+
+1. **Environment Setup**
+   Create a `.env` file in the project root:
+   ```env
    SESSION_SECRET=your-secret-key-here
+   UPLOAD_FOLDER=uploads
+   MAX_CONTENT_LENGTH=16777216  # 16MB in bytes
+   DEBUG=False
    ```
 
-6. **Run the application**
-   ```bash
+2. **Initialize Database**
+   ```powershell
+   # Create required directories
+   mkdir uploads
+   ```
+
+### 🏃‍♂️ Run the Application
+
+1. **Development Mode**
+   ```powershell
    python main.py
    ```
 
-7. **Open your browser**
-   Navigate to `http://localhost:5000`
+2. **Production Mode**
+   ```powershell
+   gunicorn --bind 0.0.0.0:5000 main:app
+   ```
+
+3. **Access the Application**
+   Open your browser and navigate to:
+   - Local: http://localhost:5000
+   - Network: http://your-ip:5000
+
+### 🐳 Docker Support
+
+```powershell
+# Build the Docker image
+docker build -t resume-analyzer .
+
+# Run the container
+docker run -p 5000:5000 resume-analyzer
+```
 
 ## Project Structure
 
@@ -98,20 +155,29 @@ resume-analyzer/
 └── uploads/             # Temporary file storage (auto-created)
 ```
 
-## Technology Stack
+## 🛠️ Technology Stack
 
-### Backend
-- **Flask**: Lightweight web framework
-- **spaCy**: Industrial-strength NLP library
-- **scikit-learn**: Machine learning for TF-IDF and similarity calculations
-- **PyMuPDF**: PDF text extraction
-- **NumPy**: Numerical computations
+### 🐍 Backend Framework
+[![Python](https://img.shields.io/badge/Python-3.11+-blue.svg?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![Flask](https://img.shields.io/badge/Flask-2.3.0-green.svg?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
+[![Gunicorn](https://img.shields.io/badge/Gunicorn-20.1-black.svg?style=for-the-badge&logo=gunicorn&logoColor=white)](https://gunicorn.org/)
 
-### Frontend
-- **Bootstrap 5**: Responsive UI framework
-- **Chart.js**: Interactive data visualizations
-- **Font Awesome**: Icon library
-- **Vanilla JavaScript**: Enhanced user interactions
+### 🧠 AI & Data Processing
+[![spaCy](https://img.shields.io/badge/spaCy-3.8.0-blue.svg?style=for-the-badge&logo=spacy&logoColor=white)](https://spacy.io/)
+[![scikit-learn](https://img.shields.io/badge/scikit--learn-1.3-orange.svg?style=for-the-badge&logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
+[![NumPy](https://img.shields.io/badge/NumPy-1.24-013243.svg?style=for-the-badge&logo=numpy&logoColor=white)](https://numpy.org/)
+[![PyMuPDF](https://img.shields.io/badge/PyMuPDF-1.23-red.svg?style=for-the-badge)](https://pymupdf.readthedocs.io/)
+
+### 🎨 Frontend Technologies
+[![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3-purple.svg?style=for-the-badge&logo=bootstrap&logoColor=white)](https://getbootstrap.com/)
+[![Chart.js](https://img.shields.io/badge/Chart.js-4.0-red.svg?style=for-the-badge&logo=chart.js&logoColor=white)](https://www.chartjs.org/)
+[![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-yellow.svg?style=for-the-badge&logo=javascript&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+[![Font Awesome](https://img.shields.io/badge/Font_Awesome-6.0-339AF0.svg?style=for-the-badge&logo=font-awesome&logoColor=white)](https://fontawesome.com/)
+
+### 🔧 Development & Deployment
+[![Docker](https://img.shields.io/badge/Docker-20.10+-blue.svg?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
+[![Git](https://img.shields.io/badge/Git-2.x-red.svg?style=for-the-badge&logo=git&logoColor=white)](https://git-scm.com/)
+[![VS Code](https://img.shields.io/badge/VS_Code-Latest-007ACC.svg?style=for-the-badge&logo=visual-studio-code&logoColor=white)](https://code.visualstudio.com/)
 
 ## API Endpoints
 

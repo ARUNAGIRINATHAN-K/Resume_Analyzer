@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}Optimize Your Resume - ResumeFit{% endblock %}
+
+{% block hero %}
+<section class="hero-section py-5 text-center">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <h1 class="display-4 fw-bold mb-3 text-white">Optimize Your Resume For Your Dream Job</h1>
+        <p class="lead text-muted mb-4">Leverage state-of-the-art NLP parsing to measure compatibility, identify skill gaps, and get instant recommendations to boost your match rating.</p>
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+          <span class="feature-chip"><i class="fas fa-microchip me-2 text-primary"></i>Semantic NLP Parsing</span>
+          <span class="feature-chip"><i class="fas fa-chart-line me-2 text-success"></i>Match Breakdown</span>
+          <span class="feature-chip"><i class="fas fa-lightbulb me-2 text-warning"></i>Tailored Suggestions</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-xl-10">
+    <form action="{{ url_for('main.analyze') }}" method="post" enctype="multipart/form-data" id="analyzeForm">
+      <div class="row g-4">
+        <!-- Resume Upload Column -->
+        <div class="col-lg-5">
+          <div class="card h-100 shadow-sm border-0">
+            <div class="card-header bg-transparent d-flex align-items-center">
+              <div class="icon-shape bg-danger-glow text-danger rounded-3 p-2 me-3">
+                <i class="fas fa-file-pdf fa-lg"></i>
+              </div>
+              <h4 class="mb-0 fw-semibold text-white">Resume Document</h4>
+            </div>
+            <div class="card-body d-flex flex-column justify-content-between">
+              <div>
+                <p class="text-muted small mb-4">Upload your resume in PDF format. The analyzer will parse the structured text to identify key skillsets, job titles, and experiences.</p>
+                
+                <div id="dropzone" class="dropzone text-center" tabindex="0">
+                  <i class="fas fa-cloud-upload-alt fa-3x mb-3"></i>
+                  <h5 class="fw-semibold mb-2">Drag & Drop Resume</h5>
+                  <p class="text-muted small mb-0">PDF only, maximum file size 16MB</p>
+                </div>
+                
+                <input type="file" id="resume" name="resume" accept=".pdf" class="d-none" required>
+              </div>
+
+              <div id="fileInfo" class="mt-4 p-3 bg-secondary rounded-3 d-flex align-items-center justify-content-between d-none">
+                <div class="d-flex align-items-center overflow-hidden">
+                  <i class="fas fa-paperclip text-primary me-3 flex-shrink-0"></i>
+                  <span id="fileName" class="text-truncate fw-medium text-white small">resume.pdf</span>
+                </div>
+                <button type="button" class="btn btn-link btn-sm text-danger text-decoration-none p-0 ms-2" id="removeFile">
+                  <i class="fas fa-trash-alt me-1"></i> Remove
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Job Description Column -->
+        <div class="col-lg-7">
+          <div class="card h-100 shadow-sm border-0">
+            <div class="card-header bg-transparent d-flex justify-content-between align-items-center">
+              <div class="d-flex align-items-center">
+                <div class="icon-shape bg-primary-glow text-primary rounded-3 p-2 me-3">
+                  <i class="fas fa-briefcase fa-lg"></i>
+                </div>
+                <h4 class="mb-0 fw-semibold text-white">Job Details</h4>
+              </div>
+              <button type="button" class="btn btn-outline-secondary btn-sm px-3" id="sampleJD">
+                <i class="fas fa-magic me-1"></i> Try Sample JD
+              </button>
+            </div>
+            <div class="card-body">
+              <p class="text-muted small mb-3">Paste the complete job description text. Including the requirements and responsibilities helps deliver a highly accurate compatibility rating.</p>
+              
+              <textarea class="form-control" id="job_description" name="job_description" rows="11" placeholder="Paste the job description here (e.g., responsibilities, requirements, and tech stack details)..." required></textarea>
+              
+              <div class="d-flex justify-content-between mt-3 text-muted small">
+                <span><i class="fas fa-info-circle me-1 text-primary"></i> Include requirements for best results</span>
+                <span id="jdCounter" class="badge bg-secondary">0 characters</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Submit Button Section -->
+        <div class="col-12 mt-4">
+          <div class="card bg-transparent border-0">
+            <div class="card-body p-0 text-center">
+              <button type="submit" class="btn btn-primary btn-lg px-5 py-3 w-100 shadow-lg pulse-loader" id="submitBtn">
+                <i class="fas fa-magnifying-glass-chart me-2"></i> Compute Compatibility Score
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

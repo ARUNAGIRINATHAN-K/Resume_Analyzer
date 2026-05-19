@@ -1,0 +1,312 @@
+/* Custom CSS Design System - Premium Dark Glassmorphism */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root {
+    --bg-dark: #090a0f;
+    --bg-card: rgba(18, 20, 29, 0.6);
+    --border-color: rgba(255, 255, 255, 0.075);
+    
+    /* Elegant harmonious color tokens */
+    --primary: #6366f1; /* Indigo */
+    --primary-glow: rgba(99, 102, 241, 0.15);
+    --secondary: #a855f7; /* Purple */
+    --success: #10b981; /* Emerald */
+    --success-glow: rgba(16, 185, 129, 0.15);
+    --warning: #f59e0b; /* Amber */
+    --warning-glow: rgba(245, 158, 11, 0.15);
+    --danger: #ef4444; /* Rose */
+    --danger-glow: rgba(239, 68, 68, 0.15);
+    --info: #06b6d4; /* Cyan */
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    --gradient-success: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    --gradient-warning: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    --gradient-danger: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    --gradient-dark: linear-gradient(180deg, #090a0f 0%, #11131e 100%);
+}
+
+body {
+    background: var(--bg-dark);
+    background-image: 
+        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(168, 85, 247, 0.12) 0px, transparent 50%);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: #e2e8f0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6, .navbar-brand {
+    font-family: 'Space Grotesk', sans-serif;
+    letter-spacing: -0.02em;
+}
+
+/* Glassmorphism Cards */
+.card {
+    background: var(--bg-card) !important;
+    backdrop-filter: blur(20px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 20px !important;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3) !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(99, 102, 241, 0.25) !important;
+    box-shadow: 0 12px 40px 0 rgba(99, 102, 241, 0.15) !important;
+}
+
+.card-header {
+    background: rgba(255, 255, 255, 0.02) !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    border-top-left-radius: 20px !important;
+    border-top-right-radius: 20px !important;
+    padding: 1.25rem 1.5rem !important;
+}
+
+/* Navbar */
+.navbar {
+    background: rgba(9, 10, 15, 0.7) !important;
+    backdrop-filter: blur(12px) !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    padding: 1rem 0;
+}
+
+.navbar-brand {
+    font-size: 1.4rem;
+    font-weight: 700;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-flex;
+    align-items: center;
+}
+
+/* Forms & Inputs */
+.form-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #94a3b8;
+    margin-bottom: 0.5rem;
+}
+
+.form-control {
+    background-color: rgba(15, 23, 42, 0.6) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 12px !important;
+    color: #f1f5f9 !important;
+    padding: 0.75rem 1rem !important;
+    transition: all 0.2s ease-in-out !important;
+}
+
+.form-control:focus {
+    background-color: rgba(15, 23, 42, 0.8) !important;
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 4px var(--primary-glow) !important;
+}
+
+/* Custom Textareas */
+textarea.form-control {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    line-height: 1.6;
+}
+
+/* Interactive Upload Dropzone */
+.dropzone {
+    border: 2px dashed rgba(99, 102, 241, 0.3) !important;
+    border-radius: 16px !important;
+    background: rgba(99, 102, 241, 0.02) !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    padding: 3rem 2rem !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.dropzone:hover, .dropzone.dragover {
+    border-color: var(--primary) !important;
+    background: rgba(99, 102, 241, 0.08) !important;
+    transform: scale(1.02);
+}
+
+.dropzone i {
+    color: var(--primary);
+    transition: all 0.3s ease;
+}
+
+.dropzone:hover i {
+    transform: translateY(-6px) scale(1.1);
+    color: var(--secondary);
+}
+
+/* Buttons */
+.btn {
+    border-radius: 12px !important;
+    padding: 0.75rem 1.5rem !important;
+    font-weight: 600 !important;
+    font-size: 0.95rem !important;
+    letter-spacing: -0.01em !important;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.btn-primary {
+    background: var(--gradient-primary) !important;
+    border: none !important;
+    box-shadow: 0 4px 15px var(--primary-glow) !important;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.3) !important;
+}
+
+.btn-success {
+    background: var(--gradient-success) !important;
+    border: none !important;
+}
+
+.btn-success:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3) !important;
+}
+
+.btn-outline-primary {
+    border: 1px solid var(--primary) !important;
+    color: #e2e8f0 !important;
+}
+
+.btn-outline-primary:hover {
+    background: var(--gradient-primary) !important;
+    border-color: transparent !important;
+    transform: translateY(-2px) !important;
+}
+
+.btn-outline-secondary {
+    border: 1px solid var(--border-color) !important;
+    color: #94a3b8 !important;
+}
+
+.btn-outline-secondary:hover {
+    background: rgba(255, 255, 255, 0.05) !important;
+    color: #f1f5f9 !important;
+    transform: translateY(-2px) !important;
+}
+
+/* Badges styling */
+.badge {
+    padding: 0.5em 0.85em !important;
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+    border-radius: 6px !important;
+    letter-spacing: 0.02em !important;
+}
+
+.bg-success {
+    background-color: var(--success-glow) !important;
+    color: #34d399 !important;
+    border: 1px solid rgba(16, 185, 129, 0.2) !important;
+}
+
+.bg-warning {
+    background-color: var(--warning-glow) !important;
+    color: #fbbf24 !important;
+    border: 1px solid rgba(245, 158, 11, 0.2) !important;
+}
+
+.bg-danger {
+    background-color: var(--danger-glow) !important;
+    color: #f87171 !important;
+    border: 1px solid rgba(239, 68, 68, 0.2) !important;
+}
+
+.bg-secondary {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    color: #94a3b8 !important;
+    border: 1px solid var(--border-color) !important;
+}
+
+/* Hero Section */
+.hero-section {
+    background: transparent !important;
+    padding: 4rem 0 2rem 0 !important;
+}
+
+.feature-chip {
+    background: rgba(255, 255, 255, 0.03) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 30px !important;
+    padding: 0.5rem 1.25rem !important;
+    font-size: 0.85rem !important;
+    font-weight: 500 !important;
+    color: #cbd5e1 !important;
+    backdrop-filter: blur(10px) !important;
+    transition: all 0.3s ease !important;
+}
+
+.feature-chip:hover {
+    border-color: rgba(99, 102, 241, 0.4) !important;
+    transform: translateY(-2px) !important;
+    background: rgba(99, 102, 241, 0.05) !important;
+}
+
+/* Score Hero Visualization */
+#overallScoreChart {
+    transform: rotate(-90deg); /* Adjust starting angle of doughnut */
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-dark);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(99, 102, 241, 0.4);
+}
+
+/* Pulse Animation for loading */
+@keyframes pulseGlow {
+    0%, 100% {
+        box-shadow: 0 4px 15px var(--primary-glow);
+    }
+    50% {
+        box-shadow: 0 4px 30px rgba(99, 102, 241, 0.4);
+    }
+}
+
+.pulse-loader {
+    animation: pulseGlow 1.5s infinite ease-in-out;
+}
+
+/* Print Overrides */
+@media print {
+    body {
+        background: white !important;
+        color: black !important;
+    }
+    .card {
+        background: transparent !important;
+        border: 1px solid #ddd !important;
+        box-shadow: none !important;
+        color: black !important;
+    }
+    .btn, .navbar, footer, #editorSection {
+        display: none !important;
+    }
+}

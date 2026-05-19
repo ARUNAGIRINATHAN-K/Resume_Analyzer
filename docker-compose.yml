@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=production
+      - SESSION_SECRET=production-secure-session-key-override
+      - PORT=5000
+    volumes:
+      - ./uploads:/app/uploads
+    restart: always

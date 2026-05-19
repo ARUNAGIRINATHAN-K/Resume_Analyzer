@@ -111,21 +111,29 @@ Before you begin, ensure you have the following installed:
 
 1. **Development Mode**
    ```powershell
-   python main.py
+   # Running using the WSGI entry point script
+   python wsgi.py
    ```
 
 2. **Production Mode**
    ```powershell
-   gunicorn --bind 0.0.0.0:5000 main:app
+   # Bind to wsgi app instance
+   gunicorn --bind 0.0.0.0:5000 wsgi:app
    ```
 
 3. **Access the Application**
    Open your browser and navigate to:
    - Local: http://localhost:5000
-   - Network: http://your-ip:5000
 
 ### 🐳 Docker Support
 
+You can spin up the application along with all dependencies using Docker:
+```powershell
+# Start via Docker Compose
+docker compose up --build
+```
+
+Alternatively, run as a standalone container:
 ```powershell
 # Build the Docker image
 docker build -t resume-analyzer .
@@ -134,25 +142,43 @@ docker build -t resume-analyzer .
 docker run -p 5000:5000 resume-analyzer
 ```
 
+### 🧪 Running Tests
+
+Execute the automated test suite with `pytest`:
+```powershell
+pytest
+```
+
 ## Project Structure
 
 ```
 resume-analyzer/
-├── app.py                 # Main Flask application
-├── main.py               # Application entry point
-├── nlp_processor.py      # NLP processing and text analysis
-├── scoring_engine.py     # Scoring algorithms and suggestions
-├── requirements.txt      # Python dependencies
-├── templates/           # HTML templates
-│   ├── base.html        # Base template with Bootstrap
-│   ├── index.html       # Upload form
-│   └── results.html     # Analysis results
-├── static/              # Static assets
-│   ├── css/
-│   │   └── style.css    # Custom styling
-│   └── js/
-│       └── main.js      # Frontend interactions
-└── uploads/             # Temporary file storage (auto-created)
+├── app/                      # Application Package
+│   ├── __init__.py           # Application Factory Setup
+│   ├── config.py             # Configuration Class
+│   ├── routes.py             # Controllers/Blueprints
+│   ├── utils.py              # File Parsing/Utility Functions
+│   ├── nlp_processor.py      # spaCy & TF-IDF Extraction
+│   ├── scoring_engine.py     # Match Compatibility Scoring
+│   ├── static/               # Client Assets
+│   │   ├── css/
+│   │   │   └── style.css     # Theme Rules
+│   │   └── js/
+│   │       └── main.js       # Basic UI Hooks
+│   └── templates/            # HTML Views
+│       ├── base.html
+│       ├── index.html
+│       └── results.html
+├── tests/                    # Testing Framework
+│   ├── conftest.py           # pytest fixtures
+│   └── test_routes.py        # Integration test cases
+├── uploads/                  # Temporary file processing folder
+├── wsgi.py                   # Production Entrypoint
+├── Dockerfile                # Production Container Config
+├── docker-compose.yml        # Docker Orchestration Configuration
+├── requirements.txt          # Python dependencies
+├── .env.example              # Env configuration template
+└── README.md                 # Project Documentation
 ```
 
 ## 🛠️ Technology Stack
@@ -279,7 +305,7 @@ self.skill_patterns = {
 ### Production Deployment
 
 ```bash
-gunicorn --bind 0.0.0.0:5000 --reuse-port --reload main:app
+gunicorn --bind 0.0.0.0:5000 --reuse-port --reload wsgi:app
 ```
 
 ### Docker Support
@@ -295,7 +321,7 @@ RUN python -m spacy download en_core_web_sm
 COPY . .
 EXPOSE 5000
 
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "main:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "wsgi:app"]
 ```
 
 ## Security Considerations

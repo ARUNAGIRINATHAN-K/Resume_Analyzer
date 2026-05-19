@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Resume Analyzer{% endblock %}</title>
+    <title>{% block title %}Resume Job Fit Analyzer{% endblock %}</title>
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" rel="stylesheet">
@@ -16,11 +16,17 @@
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="{{ url_for('index') }}">
-                <i class="fas fa-file-alt me-2"></i>Resume Analyzer
+            <a class="navbar-brand" href="{{ url_for('main.index') }}">
+                <i class="fas fa-brain me-2 text-primary"></i>
+                <span>Resume<span class="text-white">Fit</span></span>
             </a>
+            <div class="d-flex gap-2">
+                <a href="https://github.com/ARUNAGIRINATHAN-K/resume-analyzer" target="_blank" class="btn btn-outline-secondary btn-sm px-3">
+                    <i class="fab fa-github me-1"></i> Star
+                </a>
+            </div>
         </div>
     </nav>
 
@@ -28,13 +34,13 @@
     {% block hero %}{% endblock %}
 
     <!-- Main Content -->
-    <main class="flex-fill">
-        <div class="container my-4">
+    <main class="flex-fill py-4">
+        <div class="container">
             <!-- Flash Messages -->
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                     {% for category, message in messages %}
-                        <div class="alert alert-{{ 'danger' if category == 'error' else 'success' }} alert-dismissible fade show" role="alert">
+                        <div class="alert alert-{{ 'danger' if category == 'error' else 'success' }} alert-dismissible fade show border-0 shadow" role="alert">
                             <i class="fas fa-{{ 'exclamation-triangle' if category == 'error' else 'check-circle' }} me-2"></i>
                             {{ message }}
                             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
@@ -48,11 +54,11 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-dark py-4 mt-5">
+    <footer class="py-4 mt-auto border-top border-secondary-subtle" style="background: rgba(9, 10, 15, 0.9);">
         <div class="container text-center">
-            <p class="mb-0 text-muted">
-                <i class="fas fa-code me-1"></i>
-                Resume Analyzer - Powered by NLP & Machine Learning
+            <p class="mb-0 text-muted small">
+                <i class="fas fa-code me-1 text-primary"></i>
+                ResumeFit - AI-Powered Job Compatibility Scoring & Resume Optimization.
             </p>
         </div>
     </footer>

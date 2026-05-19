@@ -1,0 +1,511 @@
+{% extends "base.html" %}
+
+{% block title %}Analysis Dashboard - ResumeFit{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+    <!-- Top Action Header -->
+    <div class="col-12">
+        <div class="card border-0 mb-2 shadow-sm">
+            <div class="card-body py-3 d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+                <div class="d-flex align-items-center">
+                    <div class="icon-shape bg-primary-glow text-primary rounded-3 p-2 me-3">
+                        <i class="fas fa-chart-line fa-lg"></i>
+                    </div>
+                    <div>
+                        <h4 class="mb-0 fw-semibold text-white">Analysis Dashboard</h4>
+                        <small class="text-muted">Review scores, skills compatibility, and improve your resume</small>
+                    </div>
+                </div>
+                <div class="d-flex gap-2 flex-wrap">
+                    <button id="editInputsBtn" class="btn btn-primary btn-sm px-3" data-bs-toggle="collapse" data-bs-target="#editorSection" aria-expanded="false" aria-controls="editorSection">
+                        <i class="fas fa-edit me-1"></i> Edit & Re-Analyze
+                    </button>
+                    <button id="downloadPDF" class="btn btn-outline-primary btn-sm px-3">
+                        <i class="fas fa-download me-1"></i> Print / PDF
+                    </button>
+                    <button id="shareResults" class="btn btn-outline-secondary btn-sm px-3">
+                        <i class="fas fa-share me-1"></i> Share
+                    </button>
+                    <a href="{{ url_for('main.index') }}" class="btn btn-outline-secondary btn-sm px-3">
+                        <i class="fas fa-arrow-left me-1"></i> Analyze Another
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interactive Editor Section (Collapsible) -->
+    <div class="col-12">
+        <div class="collapse" id="editorSection">
+            <div class="card shadow-lg border-primary mb-2">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center py-3">
+                    <h5 class="card-title mb-0"><i class="fas fa-terminal me-2"></i>Interactive Resume Optimizer</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-toggle="collapse" data-bs-target="#editorSection" aria-label="Close"></button>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted small mb-3">Optimize your resume text in real-time below. Add missing keywords, match required qualifications, and click <strong>Re-Analyze Fit</strong> to instantly update the charts and scores.</p>
+                    <div class="row g-3">
+                        <div class="col-lg-6">
+                            <label for="editorResumeText" class="form-label fw-bold"><i class="fas fa-file-lines me-2 text-danger"></i>Resume Text (Editable)</label>
+                            <textarea class="form-control font-monospace text-light small" id="editorResumeText" rows="12" style="background-color: rgba(9, 10, 15, 0.95); line-height: 1.5; border-color: rgba(99, 102, 241, 0.2) !important;">{{ results.resume_text }}</textarea>
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="editorJDText" class="form-label fw-bold"><i class="fas fa-briefcase me-2 text-primary"></i>Job Description (Editable)</label>
+                            <textarea class="form-control font-monospace text-light small" id="editorJDText" rows="12" style="background-color: rgba(9, 10, 15, 0.95); line-height: 1.5; border-color: rgba(99, 102, 241, 0.2) !important;">{{ results.job_description }}</textarea>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center mt-3 gap-3">
+                        <span class="text-muted small"><i class="fas fa-info-circle me-1 text-primary"></i> Updates are computed locally without reloading the webpage.</span>
+                        <div>
+                            <button id="reanalyzeTextBtn" class="btn btn-success px-4 py-2">
+                                <i class="fas fa-sync-alt me-2"></i> Re-Analyze Fit
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overall Fit Score Hero (Main View) -->
+    <div class="col-lg-4">
+        <div class="card h-100 text-center shadow-sm border-0">
+            <div class="card-header bg-transparent py-3">
+                <h5 class="mb-0 fw-semibold text-white">Overall Compatibility</h5>
+            </div>
+            <div class="card-body d-flex flex-column justify-content-center align-items-center py-4">
+                <div class="position-relative d-inline-block my-3" style="width: 200px; height: 200px;">
+                    <canvas id="overallScoreChart" width="200" height="200"></canvas>
+                    <div class="position-absolute top-50 start-50 translate-middle text-center">
+                        <h1 id="overallScoreValue" class="display-3 fw-bold mb-0 text-{{ 'success' if results.overall_score >= 80 else 'warning' if results.overall_score >= 60 else 'danger' }}">
+                            {{ results.overall_score }}
+                        </h1>
+                        <span class="text-muted small fw-medium">out of 100</span>
+                    </div>
+                </div>
+                <div class="mt-3 px-2">
+                    <p id="overallMatchMessage" class="fw-semibold mb-0" style="font-size: 1.05rem;">
+                        {% if results.overall_score >= 85 %}
+                            <i class="fas fa-trophy text-warning me-2"></i>
+                            Excellent match for this position!
+                        {% elif results.overall_score >= 70 %}
+                            <i class="fas fa-circle-check text-success me-2"></i>
+                            Good match. Minor improvements advised.
+                        {% elif results.overall_score >= 50 %}
+                            <i class="fas fa-triangle-exclamation text-warning me-2"></i>
+                            Moderate match. Tailor details further.
+                        {% else %}
+                            <i class="fas fa-circle-xmark text-danger me-2"></i>
+                            Low match. Resume requires updates.
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Match Breakdown Card -->
+    <div class="col-lg-8">
+        <div class="card h-100 shadow-sm border-0">
+            <div class="card-header bg-transparent py-3">
+                <h5 class="mb-0 fw-semibold text-white">Competency Match Breakdown</h5>
+            </div>
+            <div class="card-body">
+                <div style="height: 180px; position: relative;">
+                    <canvas id="scoreBreakdownChart"></canvas>
+                </div>
+                
+                <!-- Detailed Grid Details -->
+                <div class="mt-4 border-top border-secondary-subtle pt-3">
+                    <div class="row g-3">
+                        <div class="col-4 text-center">
+                            <div class="p-2 rounded bg-opacity-10 bg-primary">
+                                <span class="text-muted small d-block mb-1">Skills Match</span>
+                                <h4 id="skillScoreValue" class="fw-bold text-primary mb-0">{{ results.skill_score }}%</h4>
+                                <small class="text-muted small">50% weight</small>
+                            </div>
+                        </div>
+                        <div class="col-4 text-center">
+                            <div class="p-2 rounded bg-opacity-10 bg-info">
+                                <span class="text-muted small d-block mb-1">Role Relevance</span>
+                                <h4 id="roleScoreValue" class="fw-bold text-info mb-0">{{ results.role_score }}%</h4>
+                                <small class="text-muted small">30% weight</small>
+                            </div>
+                        </div>
+                        <div class="col-4 text-center">
+                            <div class="p-2 rounded bg-opacity-10 bg-success">
+                                <span class="text-muted small d-block mb-1">Experience</span>
+                                <h4 id="experienceScoreValue" class="fw-bold text-success mb-0">{{ results.experience_score }}%</h4>
+                                <small class="text-muted small">20% weight</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Keywords Analysis Panel -->
+    <div class="col-lg-6">
+        <div class="card h-100 shadow-sm border-0">
+            <div class="card-header bg-transparent py-3">
+                <h5 class="mb-0 fw-semibold text-white"><i class="fas fa-key me-2 text-warning"></i>Semantic Keywords Gap Analysis</h5>
+            </div>
+            <div id="keywordsCardBody" class="card-body keyword-container" style="max-height: 380px;">
+                <!-- Matched Keywords -->
+                {% if results.matched_keywords %}
+                <div class="mb-4">
+                    <h6 class="text-success fw-semibold mb-2">
+                        <i class="fas fa-circle-check me-2"></i>
+                        Matched Terms (<span id="matchedKeywordsCount">{{ results.matched_keywords|length }}</span>)
+                    </h6>
+                    <div id="matchedKeywordsList" class="d-flex flex-wrap gap-2">
+                        {% for keyword in results.matched_keywords[:15] %}
+                        <span class="badge bg-success">{{ keyword }}</span>
+                        {% endfor %}
+                        {% if results.matched_keywords|length > 15 %}
+                        <span class="badge bg-secondary">+{{ results.matched_keywords|length - 15 }} more</span>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Missing Keywords -->
+                {% if results.missing_keywords %}
+                <div>
+                    <h6 class="text-warning fw-semibold mb-2">
+                        <i class="fas fa-triangle-exclamation me-2"></i>
+                        Missing Keywords (<span id="missingKeywordsCount">{{ results.missing_keywords|length }}</span>)
+                    </h6>
+                    <div id="missingKeywordsList" class="d-flex flex-wrap gap-2">
+                        {% for keyword in results.missing_keywords[:15] %}
+                        <span class="badge bg-warning">{{ keyword }}</span>
+                        {% endfor %}
+                        {% if results.missing_keywords|length > 15 %}
+                        <span class="badge bg-secondary">+{{ results.missing_keywords|length - 15 }} more</span>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if not results.matched_keywords and not results.missing_keywords %}
+                <div id="noKeywordsMsg" class="text-center text-muted py-5">
+                    <i class="fas fa-magnifying-glass fa-2x mb-3 text-secondary"></i>
+                    <p class="mb-0">No specific keyword overlap detected. Edit the text and run re-analysis to try again.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Optimization Suggestions List -->
+    <div class="col-lg-6">
+        <div class="card h-100 shadow-sm border-0" id="suggestionsCard" style="{% if not results.suggestions %}display: none;{% endif %}">
+            <div class="card-header bg-transparent py-3">
+                <h5 class="mb-0 fw-semibold text-white"><i class="fas fa-lightbulb me-2 text-primary"></i>Actionable Improvement Plan</h5>
+            </div>
+            <div class="card-body keyword-container" id="suggestionsCardBody" style="max-height: 380px;">
+                <div class="row g-3">
+                    {% for suggestion in results.suggestions %}
+                    <div class="col-12">
+                        <div class="card bg-dark bg-opacity-25 h-100 border-start border-4 border-{{ 'danger' if suggestion.priority == 'High' else 'warning' if suggestion.priority == 'Medium' else 'info' }} rounded-3">
+                            <div class="card-body p-3">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h6 class="mb-0 fw-semibold text-white">
+                                        <i class="fas fa-{{ 'circle-exclamation' if suggestion.priority == 'High' else 'star' if suggestion.priority == 'Medium' else 'info-circle' }} me-2 text-{{ 'danger' if suggestion.priority == 'High' else 'warning' if suggestion.priority == 'Medium' else 'info' }}"></i>
+                                        {{ suggestion.category }}
+                                    </h6>
+                                    <span class="badge bg-{{ 'danger' if suggestion.priority == 'High' else 'warning' if suggestion.priority == 'Medium' else 'info' }} text-uppercase">
+                                        {{ suggestion.priority }}
+                                    </span>
+                                </div>
+                                <p class="fw-medium text-light mb-1 small">{{ suggestion.suggestion }}</p>
+                                <p class="text-muted small mb-0">{{ suggestion.description }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Keep references to charts globally for updates
+let overallChart = null;
+let breakdownChart = null;
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Configure default chart fonts
+    Chart.defaults.color = '#94a3b8';
+    Chart.defaults.font.family = "'Plus Jakarta Sans', sans-serif";
+
+    // Overall Score Doughnut Chart
+    const overallCtx = document.getElementById('overallScoreChart').getContext('2d');
+    const overallScore = {{ results.overall_score }};
+
+    overallChart = new Chart(overallCtx, {
+        type: 'doughnut',
+        data: {
+            datasets: [{
+                data: [overallScore, 100 - overallScore],
+                backgroundColor: [
+                    overallScore >= 80 ? '#10b981' : overallScore >= 60 ? '#f59e0b' : '#ef4444',
+                    'rgba(255, 255, 255, 0.05)'
+                ],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '82%',
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    enabled: false
+                }
+            }
+        }
+    });
+
+    // Score Breakdown Bar Chart
+    const breakdownCtx = document.getElementById('scoreBreakdownChart').getContext('2d');
+
+    breakdownChart = new Chart(breakdownCtx, {
+        type: 'bar',
+        data: {
+            labels: ['Skills (50%)', 'Role (30%)', 'Experience (20%)'],
+            datasets: [{
+                label: 'Score Match',
+                data: [{{ results.skill_score }}, {{ results.role_score }}, {{ results.experience_score }}],
+                backgroundColor: [
+                    'rgba(99, 102, 241, 0.8)',
+                    'rgba(6, 182, 212, 0.8)',
+                    'rgba(16, 185, 129, 0.8)'
+                ],
+                borderColor: [
+                    '#6366f1',
+                    '#06b6d4',
+                    '#10b981'
+                ],
+                borderWidth: 1,
+                borderRadius: 8,
+                barThickness: 28
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            indexAxis: 'y', // Convert to horizontal bars for cleaner dashboard aesthetics
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    max: 100,
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.05)'
+                    },
+                    ticks: {
+                        callback: function(value) {
+                            return value + '%';
+                        }
+                    }
+                },
+                y: {
+                    grid: {
+                        display: false
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return ' ' + context.parsed.x + '%';
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // Re-Analyze text logic
+    const reanalyzeBtn = document.getElementById('reanalyzeTextBtn');
+    const editorResumeText = document.getElementById('editorResumeText');
+    const editorJDText = document.getElementById('editorJDText');
+
+    if (reanalyzeBtn && editorResumeText && editorJDText) {
+        reanalyzeBtn.addEventListener('click', async function() {
+            const originalBtnContent = reanalyzeBtn.innerHTML;
+            reanalyzeBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Analyzing...';
+            reanalyzeBtn.disabled = true;
+
+            try {
+                const response = await fetch('/api/analyze-text', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        resume_text: editorResumeText.value,
+                        job_description: editorJDText.value
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Analysis request failed');
+                }
+
+                const data = await response.json();
+
+                // 1. Update overall score display
+                const scoreValueEl = document.getElementById('overallScoreValue');
+                scoreValueEl.textContent = data.overall_score;
+                scoreValueEl.className = 'display-3 fw-bold mb-0';
+                if (data.overall_score >= 80) {
+                    scoreValueEl.classList.add('text-success');
+                } else if (data.overall_score >= 60) {
+                    scoreValueEl.classList.add('text-warning');
+                } else {
+                    scoreValueEl.classList.add('text-danger');
+                }
+
+                // 2. Update overall match message
+                const matchMsgEl = document.getElementById('overallMatchMessage');
+                let matchHtml = '';
+                if (data.overall_score >= 85) {
+                    matchHtml = '<i class="fas fa-trophy text-warning me-2"></i>Excellent match for this position!';
+                } else if (data.overall_score >= 70) {
+                    matchHtml = '<i class="fas fa-circle-check text-success me-2"></i>Good match. Minor improvements advised.';
+                } else if (data.overall_score >= 50) {
+                    matchHtml = '<i class="fas fa-triangle-exclamation text-warning me-2"></i>Moderate match. Tailor details further.';
+                } else {
+                    matchHtml = '<i class="fas fa-circle-xmark text-danger me-2"></i>Low match. Resume requires updates.';
+                }
+                matchMsgEl.innerHTML = matchHtml;
+
+                // 3. Update individual scores
+                document.getElementById('skillScoreValue').textContent = data.skill_score + '%';
+                document.getElementById('roleScoreValue').textContent = data.role_score + '%';
+                document.getElementById('experienceScoreValue').textContent = data.experience_score + '%';
+
+                // 4. Update charts
+                if (overallChart) {
+                    overallChart.data.datasets[0].data = [data.overall_score, 100 - data.overall_score];
+                    overallChart.data.datasets[0].backgroundColor[0] = data.overall_score >= 80 ? '#10b981' : data.overall_score >= 60 ? '#f59e0b' : '#ef4444';
+                    overallChart.update();
+                }
+
+                if (breakdownChart) {
+                    breakdownChart.data.datasets[0].data = [data.skill_score, data.role_score, data.experience_score];
+                    breakdownChart.update();
+                }
+
+                // 5. Update keywords section
+                const keywordsCardBody = document.getElementById('keywordsCardBody');
+                let kwHtml = '';
+                if (data.matched_keywords && data.matched_keywords.length > 0) {
+                    kwHtml += `
+                    <div class="mb-4">
+                        <h6 class="text-success fw-semibold mb-2">
+                            <i class="fas fa-circle-check me-2"></i>
+                            Matched Terms (<span id="matchedKeywordsCount">${data.matched_keywords.length}</span>)
+                        </h6>
+                        <div id="matchedKeywordsList" class="d-flex flex-wrap gap-2">
+                    `;
+                    data.matched_keywords.slice(0, 15).forEach(kw => {
+                        kwHtml += `<span class="badge bg-success">${kw}</span>`;
+                    });
+                    if (data.matched_keywords.length > 15) {
+                        kwHtml += `<span class="badge bg-secondary">+${data.matched_keywords.length - 15} more</span>`;
+                    }
+                    kwHtml += `</div></div>`;
+                }
+
+                if (data.missing_keywords && data.missing_keywords.length > 0) {
+                    kwHtml += `
+                    <div>
+                        <h6 class="text-warning fw-semibold mb-2">
+                            <i class="fas fa-triangle-exclamation me-2"></i>
+                            Missing Keywords (<span id="missingKeywordsCount">${data.missing_keywords.length}</span>)
+                        </h6>
+                        <div id="missingKeywordsList" class="d-flex flex-wrap gap-2">
+                    `;
+                    data.missing_keywords.slice(0, 15).forEach(kw => {
+                        kwHtml += `<span class="badge bg-warning">${kw}</span>`;
+                    });
+                    if (data.missing_keywords.length > 15) {
+                        kwHtml += `<span class="badge bg-secondary">+${data.missing_keywords.length - 15} more</span>`;
+                    }
+                    kwHtml += `</div></div>`;
+                }
+
+                if ((!data.matched_keywords || data.matched_keywords.length === 0) && (!data.missing_keywords || data.missing_keywords.length === 0)) {
+                    kwHtml += `
+                    <div id="noKeywordsMsg" class="text-center text-muted py-5">
+                        <i class="fas fa-magnifying-glass fa-2x mb-3 text-secondary"></i>
+                        <p class="mb-0">No specific keyword overlap detected. Edit the text and run re-analysis to try again.</p>
+                    </div>
+                    `;
+                }
+                keywordsCardBody.innerHTML = kwHtml;
+
+                // 6. Update suggestions section
+                const suggestionsCard = document.getElementById('suggestionsCard');
+                const suggestionsCardBody = document.getElementById('suggestionsCardBody');
+                if (data.suggestions && data.suggestions.length > 0) {
+                    let sugHtml = '<div class="row g-3">';
+                    data.suggestions.forEach(sug => {
+                        const priorityClass = sug.priority === 'High' ? 'danger' : sug.priority === 'Medium' ? 'warning' : 'info';
+                        const icon = sug.priority === 'High' ? 'circle-exclamation' : sug.priority === 'Medium' ? 'star' : 'info-circle';
+                        sugHtml += `
+                        <div class="col-12">
+                            <div class="card bg-dark bg-opacity-25 h-100 border-start border-4 border-${priorityClass} rounded-3">
+                                <div class="card-body p-3">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <h6 class="mb-0 fw-semibold text-white">
+                                            <i class="fas fa-${icon} me-2 text-${priorityClass}"></i>
+                                            ${sug.category}
+                                        </h6>
+                                        <span class="badge bg-${priorityClass} text-uppercase">
+                                            ${sug.priority}
+                                        </span>
+                                    </div>
+                                    <p class="fw-medium text-light mb-1 small">${sug.suggestion}</p>
+                                    <p class="text-muted small mb-0">${sug.description}</p>
+                                </div>
+                            </div>
+                        </div>
+                        `;
+                    });
+                    sugHtml += '</div>';
+                    suggestionsCardBody.innerHTML = sugHtml;
+                    suggestionsCard.style.display = 'block';
+                } else {
+                    suggestionsCard.style.display = 'none';
+                }
+
+                // Show dynamic success notification or scroll to score
+                scoreValueEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            } catch (err) {
+                console.error(err);
+                alert('An error occurred during re-analysis. Please check your inputs and try again.');
+            } finally {
+                reanalyzeBtn.innerHTML = originalBtnContent;
+                reanalyzeBtn.disabled = false;
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

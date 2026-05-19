@@ -154,7 +154,7 @@ class ScoringEngine:
         overall_score = round(overall_score)
         
         logging.debug(f"Score breakdown - Skills: {skill_score:.1f}, Role: {role_score:.1f}, "
-                     f"Experience: {experience_score:.1f}, Overall: {overall_score}")
+                      f"Experience: {experience_score:.1f}, Overall: {overall_score}")
         
         return {
             'overall_score': overall_score,

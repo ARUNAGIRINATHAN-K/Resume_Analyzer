@@ -1,5 +1,8 @@
 flask
-PyPDF2
+pymupdf
 spacy
 scikit-learn
 reportlab
+gunicorn
+python-dotenv
+pytest
